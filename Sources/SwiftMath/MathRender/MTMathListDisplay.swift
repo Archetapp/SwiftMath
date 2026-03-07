@@ -36,10 +36,10 @@ protocol DownShift {
 
 /// The base class for rendering a math equation.
 public class MTDisplay:NSObject {
-    
+
     // needed for isIos6Supported() func above
-    static var initialized = false
-    static var supported = false
+    nonisolated(unsafe) static var initialized = false
+    nonisolated(unsafe) static var supported = false
     
     /// Draws itself in the given graphics context.
     public func draw(_ context:CGContext) {

@@ -20,7 +20,7 @@ enum InterElementSpaceType : Int {
     case nsThick
 }
 
-var interElementSpaceArray = [[InterElementSpaceType]]()
+nonisolated(unsafe) var interElementSpaceArray = [[InterElementSpaceType]]()
 private let interElementLock = NSLock()
 
 func getInterElementSpaces() -> [[InterElementSpaceType]] {

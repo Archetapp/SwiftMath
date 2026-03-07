@@ -622,7 +622,7 @@ public class MTMathSpace: MTMathAtom {
 /**
  Styling of a line of math
  */
-public enum MTLineStyle:Int, Comparable {
+public enum MTLineStyle:Int, Comparable, Sendable {
     /// Display style
     case display
     /// Text style (inline)

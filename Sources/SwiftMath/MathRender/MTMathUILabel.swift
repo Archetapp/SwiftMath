@@ -217,7 +217,7 @@ public class MTMathUILabel : MTView {
         self.layer?.isGeometryFlipped = true
 #else
         self.layer.isGeometryFlipped = true
-        self.clipsToBounds = true
+        self.clipsToBounds = false
 #endif
         _fontSize = 20
         _contentInsets = MTEdgeInsetsZero
@@ -251,13 +251,20 @@ public class MTMathUILabel : MTView {
         if _displayList == nil {
             _layoutSubviews()
         }
-        
+
         guard let displayList = _displayList else { return }
 
         // drawing code
         let context = MTGraphicsGetCurrentContext()!
         context.saveGState()
-        
+
+#if os(iOS)
+        // Transform from UIKit coordinates (Y down) to math coordinates (Y up)
+        // The typesetter calculates positions assuming Y increases upward
+        context.translateBy(x: 0, y: bounds.size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+#endif
+
         displayList.draw(context)
         context.restoreGState()
     }

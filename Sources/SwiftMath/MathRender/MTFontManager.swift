@@ -9,9 +9,9 @@
 
 import Foundation
 
-public class MTFontManager {
-    
-    static public private(set) var manager: MTFontManager = {
+public class MTFontManager: @unchecked Sendable {
+
+    nonisolated(unsafe) static public private(set) var manager: MTFontManager = {
         MTFontManager()
     }()
     
