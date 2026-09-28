@@ -14,9 +14,8 @@ import SwiftUI
 func isIos6Supported() -> Bool {
     if !MTDisplay.initialized {
 #if os(iOS) || os(visionOS)
-        let reqSysVer = "6.0"
-        let currSysVer = UIDevice.current.systemVersion
-        if currSysVer.compare(reqSysVer, options: .numeric) != .orderedAscending {
+        let reqSysVer = OperatingSystemVersion(majorVersion: 6, minorVersion: 0, patchVersion: 0)
+        if ProcessInfo.processInfo.isOperatingSystemAtLeast(reqSysVer) {
             MTDisplay.supported = true
         }
 #else

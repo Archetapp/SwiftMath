@@ -87,6 +87,19 @@ final class MTMathListBuilderTests: XCTestCase {
             TestRecord(build: "{}^2",  atomType: [ .ordinary], types: [ .number ], result: "{}^{2}"),
             TestRecord(build: "x^^2", atomType: [ .variable, .ordinary ],  types: [ ], result: "x^{}{}^{2}"),
             TestRecord(build: "5{x}^2",  atomType: [ .number, .variable], types: [ ], result: "5x^{2}"),
+            TestRecord(build: "3^4", atomType: [ .number ], types: [ .number ], result: "3^{4}"),
+            TestRecord(
+                build: "3^{t/4}",
+                atomType: [ .number ],
+                types: [ .variable, .ordinary, .number ],
+                result: "3^{t/4}"
+            ),
+            TestRecord(
+                build: "3^{\\frac{t}{4}}",
+                atomType: [ .number ],
+                types: [ .fraction ],
+                result: "3^{\\frac{t}{4}}"
+            ),
         ]
     }
     
@@ -241,6 +254,26 @@ final class MTMathListBuilderTests: XCTestCase {
             // convert it back to latex
             let latex = MTMathListBuilder.mathListToString(list)
             XCTAssertEqual(latex, testCase.result, desc)
+        }
+    }
+
+    func testNumericBaseSuperscriptAttachesToLastDigit() throws {
+        let testCases = [
+            ("500^1", "500^{1}"),
+            ("500^{\\frac{4}{4}}", "500^{\\frac{4}{4}}"),
+            ("0.25^2", "0.25^{2}")
+        ]
+
+        for (input, expectedLatex) in testCases {
+            var error: NSError?
+            let list = MTMathListBuilder.build(fromString: input, error: &error)
+            let desc = "Error for string:\(input)"
+
+            XCTAssertNil(error, desc)
+            let unwrappedList = try XCTUnwrap(list, desc)
+            let baseAtom = try XCTUnwrap(unwrappedList.atoms.last, desc)
+            XCTAssertNotNil(baseAtom.superScript, desc)
+            XCTAssertEqual(MTMathListBuilder.mathListToString(unwrappedList), expectedLatex, desc)
         }
     }
     
@@ -2738,4 +2771,3 @@ final class MTMathListBuilderTests: XCTestCase {
 //    }
 
 }
-
